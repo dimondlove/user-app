@@ -18,7 +18,6 @@ public class MainController {
     @Autowired
     private UserRepository userRepository;
 
-    //Вывод всех юзеров
     @GetMapping("/users")
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = new ArrayList<>();
@@ -30,7 +29,6 @@ public class MainController {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    //Вывод юзера по id
     @GetMapping("/users/{id}")
     public ResponseEntity<User> getUserById(@PathVariable("id") int id) {
         Optional<User> userData = userRepository.findById(id);
@@ -41,14 +39,12 @@ public class MainController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    //Создание нового юзера
     @PostMapping("/users")
     public ResponseEntity<User> createUser(@RequestBody User user) {
         User _user = userRepository.save(new User(user.getUsername(), user.getEmail(), user.getPassword()));
         return new ResponseEntity<>(_user, HttpStatus.CREATED);
     }
 
-    //Изменение данных юзера
     @PutMapping("/users/{id}")
     public ResponseEntity<User> updateUser(@PathVariable("id") int id, @RequestBody User user) {
         Optional<User> userData = userRepository.findById(id);
@@ -64,14 +60,12 @@ public class MainController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    //Удаление юзера
     @DeleteMapping("/users/{id}")
     public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") int id) {
         userRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    //Удаление всех юзеров
     @DeleteMapping("/users")
     public ResponseEntity<HttpStatus> deleteAllUsers() {
         userRepository.deleteAll();
