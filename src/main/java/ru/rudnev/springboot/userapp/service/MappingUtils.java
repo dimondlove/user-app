@@ -1,26 +1,26 @@
 package ru.rudnev.springboot.userapp.service;
 
 import org.springframework.stereotype.Service;
-import ru.rudnev.springboot.userapp.dto.UserGetDto;
-import ru.rudnev.springboot.userapp.dto.UserPostDto;
+import ru.rudnev.springboot.userapp.dto.UserCreateDto;
+import ru.rudnev.springboot.userapp.dto.UserResponseDto;
 import ru.rudnev.springboot.userapp.model.User;
 
 @Service
 public class MappingUtils {
-    public UserGetDto mapToUserGetDto(User user) {
-        UserGetDto userGetDto = new UserGetDto();
-        userGetDto.setUsername(user.getUsername());
-        userGetDto.setEmail(user.getEmail());
+    public UserResponseDto mapToUserResponseDto(User user) {
+        UserResponseDto userResponseDto = new UserResponseDto();
+        userResponseDto.setId(user.getId());
+        userResponseDto.setUsername(user.getUsername());
+        userResponseDto.setEmail(user.getEmail());
 
-        return userGetDto;
+        return userResponseDto;
     }
 
-    public User mapToUSer(UserPostDto userPostDto) {
+    public User mapToUser(UserCreateDto userCreateDto) {
         User user = new User();
-        user.setId(userPostDto.getId());
-        user.setUsername(userPostDto.getUsername());
-        user.setEmail(userPostDto.getEmail());
-        user.setPassword(userPostDto.getPassword());
+        user.setUsername(userCreateDto.getUsername());
+        user.setEmail(userCreateDto.getEmail());
+        user.setPassword(userCreateDto.getPassword());
 
         return user;
     }

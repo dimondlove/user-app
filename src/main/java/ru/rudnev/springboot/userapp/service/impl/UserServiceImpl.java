@@ -1,20 +1,16 @@
 package ru.rudnev.springboot.userapp.service.impl;
 
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import ru.rudnev.springboot.userapp.dto.UserGetDto;
-import ru.rudnev.springboot.userapp.dto.UserPostDto;
+import ru.rudnev.springboot.userapp.dto.UserCreateDto;
+import ru.rudnev.springboot.userapp.dto.UserResponseDto;
 import ru.rudnev.springboot.userapp.model.User;
 import ru.rudnev.springboot.userapp.repository.UserRepository;
 import ru.rudnev.springboot.userapp.service.MappingUtils;
 import ru.rudnev.springboot.userapp.service.UserService;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -23,43 +19,40 @@ public class UserServiceImpl implements UserService {
     private final MappingUtils mappingUtils;
 
     @Override
-    public Collection<UserGetDto> getAllUsers() {
-        Collection<User> users = new ArrayList<>();
-        userRepository.findAll().forEach(users::add);
+    public Collection<UserResponseDto> getAllUsers() {
+        Collection<User> users = userRepository.findAll();
         return users
                 .stream()
-                .map(mappingUtils::mapToUserGetDto)
-                .collect(Collectors.toCollection(ArrayList::new));
+                .map(mappingUtils::mapToUserResponseDto)
+                .toList();
     }
 
     @Override
-    public ResponseEntity<UserGetDto> getUserById(int id) {
+    public UserResponseDto getUserById(int id) {
+        Optional<User> userData = userRepository.findById(id);
+        if (userData.isEmpty())
+            return null;
+        return mappingUtils.mapToUserResponseDto(userData.get());
+    }
+
+    @Override
+    public UserResponseDto createUser(UserCreateDto userCreateDto) {
+        return mappingUtils.mapToUserResponseDto(userRepository.save(mappingUtils.mapToUser(userCreateDto)));
+    }
+
+    @Override
+    public UserResponseDto updateUser(int id, UserCreateDto userCreateDto) {
         Optional<User> userData = userRepository.findById(id);
 
-        if (userData.isPresent())
-            return new ResponseEntity<>(mappingUtils.mapToUserGetDto(userData.get()), HttpStatus.OK);
-        else
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
+        if (userData.isEmpty())
+            return null;
 
-    @Override
-    public User createUser(UserPostDto userPostDto) {
-        return userRepository.save(mappingUtils.mapToUSer(userPostDto));
-    }
+        User user = userData.get();
+        user.setUsername(userCreateDto.getUsername());
+        user.setEmail(userCreateDto.getEmail());
+        user.setPassword(userCreateDto.getPassword());
 
-    @Override
-    public ResponseEntity<User> updateUser(int id, UserPostDto userPostDto) {
-        Optional<User> userData = userRepository.findById(id);
-
-        if (userData.isPresent()) {
-            User user = userData.get();
-            user.setUsername(userPostDto.getUsername());
-            user.setEmail(userPostDto.getEmail());
-            user.setPassword(userPostDto.getPassword());
-            return new ResponseEntity<>(userRepository.save(user), HttpStatus.OK);
-        }
-        else
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return mappingUtils.mapToUserResponseDto(userRepository.save(user));
     }
 
     @Override
