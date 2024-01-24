@@ -16,8 +16,6 @@ import java.util.Collection;
 @RequestMapping(path="/api")
 @AllArgsConstructor
 public class MainController {
-    @Autowired
-    private UserRepository userRepository;
     private final UserService userService;
 
     @GetMapping("/users")
