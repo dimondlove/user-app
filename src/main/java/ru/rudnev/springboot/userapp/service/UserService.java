@@ -1,18 +1,20 @@
 package ru.rudnev.springboot.userapp.service;
 
 import org.springframework.http.ResponseEntity;
+import ru.rudnev.springboot.userapp.dto.UserGetDto;
+import ru.rudnev.springboot.userapp.dto.UserPostDto;
 import ru.rudnev.springboot.userapp.model.User;
 
 import java.util.Collection;
 
 public interface UserService {
-    Collection<User> getAllUsers();
+    Collection<UserGetDto> getAllUsers();
 
-    ResponseEntity<User> getUserById(int id);
+    ResponseEntity<UserGetDto> getUserById(int id);
 
-    User createUser(User user);
+    User createUser(UserPostDto userPostDto);
 
-    ResponseEntity<User> updateUser(int id, User user);
+    ResponseEntity<User> updateUser(int id, UserPostDto userPostDto);
 
     void deleteUser(int id);
 

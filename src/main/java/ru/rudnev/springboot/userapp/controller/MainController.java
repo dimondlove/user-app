@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import ru.rudnev.springboot.userapp.dto.UserGetDto;
+import ru.rudnev.springboot.userapp.dto.UserPostDto;
 import ru.rudnev.springboot.userapp.model.User;
 import ru.rudnev.springboot.userapp.repository.UserRepository;
 import ru.rudnev.springboot.userapp.service.UserService;
@@ -19,23 +21,23 @@ public class MainController {
     private final UserService userService;
 
     @GetMapping("/users")
-    public ResponseEntity<Collection<User>> getAllUsers() {
+    public ResponseEntity<Collection<UserGetDto>> getAllUsers() {
         return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
     }
 
     @GetMapping("/users/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable("id") int id) {
+    public ResponseEntity<UserGetDto> getUserById(@PathVariable("id") int id) {
         return userService.getUserById(id);
     }
 
     @PostMapping("/users")
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        return new ResponseEntity<>(userService.createUser(user), HttpStatus.CREATED);
+    public ResponseEntity<User> createUser(@RequestBody UserPostDto userPostDto) {
+        return new ResponseEntity<>(userService.createUser(userPostDto), HttpStatus.CREATED);
     }
 
     @PutMapping("/users/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable("id") int id, @RequestBody User user) {
-        return userService.updateUser(id, user);
+    public ResponseEntity<User> updateUser(@PathVariable("id") int id, @RequestBody UserPostDto userPostDto) {
+        return userService.updateUser(id, userPostDto);
     }
 
     @DeleteMapping("/users/{id}")
