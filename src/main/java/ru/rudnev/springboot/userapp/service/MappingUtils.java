@@ -18,10 +18,14 @@ public class MappingUtils {
 
     public User mapToUser(UserCreateDto userCreateDto) {
         User user = new User();
+        setDataUser(user, userCreateDto);
+
+        return user;
+    }
+
+    public void setDataUser(User user, UserCreateDto userCreateDto) {
         user.setUsername(userCreateDto.getUsername());
         user.setEmail(userCreateDto.getEmail());
         user.setPassword(userCreateDto.getPassword());
-
-        return user;
     }
 }

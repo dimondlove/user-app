@@ -48,9 +48,7 @@ public class UserServiceImpl implements UserService {
             return null;
 
         User user = userData.get();
-        user.setUsername(userCreateDto.getUsername());
-        user.setEmail(userCreateDto.getEmail());
-        user.setPassword(userCreateDto.getPassword());
+        mappingUtils.setDataUser(user, userCreateDto);
 
         return mappingUtils.mapToUserResponseDto(userRepository.save(user));
     }
